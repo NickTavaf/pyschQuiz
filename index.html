@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychology Final Exam - Practice Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 8px;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .start-screen ul {
+            text-align: left;
+            max-width: 500px;
+            margin: 30px auto;
+            list-style-position: inside;
+        }
+
+        .start-screen li {
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .quiz-screen {
+            display: none;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-number {
+            font-size: 1.2em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .section-label {
+            font-size: 0.9em;
+            background: #667eea;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        .question-text {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 15px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 1.05em;
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .option.incorrect {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .results-screen {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .results-screen h2 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .score-display {
+            font-size: 4em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        
+            -webkit-text-fill-color: transparent;
+            margin: 30px 0;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-card {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .score-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .score-card p {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .performance-message {
+            font-size: 1.3em;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .performance-excellent {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #28a745;
+        }
+
+        .performance-good {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #17a2b8;
+        }
+
+        .performance-fair {
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffc107;
+        }
+
+        .performance-poor {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #dc3545;
+        }
+
+        .review-section {
+            text-align: left;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .review-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .review-item {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+        }
+
+        .review-item.correct {
+            border-left-color: #28a745;
+        }
+
+        .review-question {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .review-answer {
+            margin: 5px 0;
+            padding-left: 10px;
+        }
+
+        .your-answer {
+            color: #dc3545;
+        }
+
+        .correct-answer {
+            color: #28a745;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .score-display {
+                font-size: 3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 Psychology Final Exam</h1>
+            <p>Practice Quiz - Second Semester</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="content">
+            <!-- Start Screen -->
+            <div class="start-screen" id="startScreen">
+                <h2>Ready to Test Your Knowledge?</h2>
+                <p style="color: #666; margin: 20px 0;">This quiz contains 75 multiple-choice questions covering all topics from your second semester.</p>
+                
+                <ul>
+                    <li>15 questions on Psychological Science & Research Methods</li>
+                    <li>20 questions on Psychological Disorders</li>
+                    <li>20 questions on Social Psychology</li>
+                    <li>20 questions on Therapy</li>
+                </ul>
+
+                <div style="margin-top: 40px;">
+                    <button class="btn" onclick="startQuiz()">Start Quiz</button>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div class="quiz-screen" id="quizScreen">
+                <div class="question-container">
+                    <div class="question-header">
+                        <span class="question-number" id="questionNumber">Question 1 of 75</span>
+                        <span class="section-label" id="sectionLabel">Research Methods</span>
+                    </div>
+                    
+                    <div class="question-text" id="questionText"></div>
+                    
+                    <div class="options" id="optionsContainer"></div>
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" onclick="previousQuestion()" id="prevBtn">← Previous</button>
+                    <button class="btn" onclick="nextQuestion()" id="nextBtn">Next →</button>
+                </div>
+            </div>
+
+            <!-- Results Screen -->
+            <div class="results-screen" id="resultsScreen">
+                <h2>Quiz Complete! 🎉</h2>
+                <div class="score-display" id="scoreDisplay">0%</div>
+                <div class="performance-message" id="performanceMessage"></div>
+                
+                <div class="score-breakdown">
+                    <div class="score-card">
+                        <h3>Total Score</h3>
+                        <p id="totalScore">0/75</p>
+                    </div>
+                    <div class="score-card">
+                        <h3>Research Methods</h3>
+                        <p id="section1Score">0/15</p>
+                    </div>
+                    <div class="score-card">
+                        <h3>Disorders</h3>
+                        <p id="section2Score">0/20</p>
+                    </div>
+                    <div class="score-card">
+                        <h3>Social Psych</h3>
+                        <p id="section3Score">0/20</p>
+                    </div>
+                    <div class="score-card">
+                        <h3>Therapy</h3>
+                        <p id="section4Score">0/20</p>
+                    </div>
+                </div>
+
+                <div class="review-section" id="reviewSection"></div>
+
+                <div style="margin-top: 30px;">
+                    <button class="btn" onclick="restartQuiz()">Take Quiz Again</button>
+                    <button class="btn btn-secondary" onclick="showReviewOnly()">View All Answers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Section 1: Research Methods (Questions 1-15)
+            {
+                section: "Research Methods",
+                question: "Sarah predicted her team would win the championship after they won. This is an example of:",
+                options: [
+                    "Overconfidence error",
+                    "Hindsight bias",
+                    "Cognitive dissonance",
+                    "Confirmation bias"
+                ],
+                correct: 1
+            },
+            {
+                section: "Research Methods",
+                question: "Which component of the scientific attitude involves seeking truth rather than trying to be right?",
+                options: [
+                    "Curiosity",
+                    "Skepticism",
+                    "Humility",
+                    "Objectivity"
+                ],
+                correct: 2
+            },
+            {
+                section: "Research Methods",
+                question: "A hypothesis must be:",
+                options: [
+                    "Proven true",
+                    "Testable",
+                    "Complex",
+                    "Accepted by all scientists"
+                ],
+                correct: 1
+            },
+            {
+                section: "Research Methods",
+                question: "Dr. Martinez conducts an in-depth study of one patient with severe brain damage. This is called:",
+                options: [
+                    "Naturalistic observation",
+                    "Survey research",
+                    "Case study",
+                    "Experimental research"
+                ],
+                correct: 2
+            },
+            {
+                section: "Research Methods",
+                question: "A researcher finds that as ice cream sales increase, drowning rates also increase. This is an example of:",
+                options: [
+                    "Causation",
+                    "Negative correlation",
+                    "Positive correlation",
+                    "No correlation"
+                ],
+                correct: 2
+            },
+            {
+                section: "Research Methods",
+                question: "The most important reason correlation does NOT equal causation is:",
+                options: [
+                    "Correlations are always weak",
+                    "There may be confounding variables",
+                    "Correlations are not measurable",
+                    "Causation is impossible to determine"
+                ],
+                correct: 1
+            },
+            {
+                section: "Research Methods",
+                question: "In an experiment testing whether sugar causes hyperactivity in children, what is the independent variable?",
+                options: [
+                    "The children",
+                    "Sugar consumption",
+                    "Hyperactivity level",
+                    "The classroom setting"
+                ],
+                correct: 1
+            },
+            {
+                section: "Research Methods",
+                question: "Random assignment is used to:",
+                options: [
+                    "Select participants from the population",
+                    "Ensure every person has an equal chance of being studied",
+                    "Control for confounding variables",
+                    "Measure the dependent variable"
+                ],
+                correct: 2
+            },
+            {
+                section: "Research Methods",
+                question: "In a double-blind study:",
+                options: [
+                    "Only participants don't know which group they're in",
+                    "Only researchers don't know which group participants are in",
+                    "Neither participants nor researchers know who's in which group",
+                    "Everyone knows who's in which group"
+                ],
+                correct: 2
+            },
+            {
+                section: "Research Methods",
+                question: "The mean, median, and mode are all measures of:",
+                options: [
+                    "Variation",
+                    "Central tendency",
+                    "Correlation",
+                    "Statistical significance"
+                ],
+                correct: 1
+            },
+            {
+                section: "Research Methods",
+                question: "A distribution where a few extremely high scores pull the mean upward is called:",
+                options: [
+                    "Normal distribution",
+                    "Standard distribution",
+                    "Skewed distribution",
+                    "Random distribution"
+                ],
+                correct: 2
+            },
+            {
+                section: "Research Methods",
+                question: "Which measure of central tendency is most affected by extreme scores?",
+                options: [
+                    "Mean",
+                    "Median",
+                    "Mode",
+                    "Range"
+                ],
+                correct: 0
+            },
+            {
+                section: "Research Methods",
+                question: "The fundamental attribution error is:",
+                options: [
+                    "Blaming situations instead of people",
+                    "Overemphasizing dispositional factors",
+                    "Making accurate attributions",
+                    "Avoiding all errors in thinking"
+                ],
+                correct: 1
+            },
+            {
+                section: "Research Methods",
+                question: "Operational definitions are important because they:",
+                options: [
+                    "Make concepts measurable",
+                    "Prove theories correct",
+                    "Eliminate all confounds",
+                    "Guarantee replication"
+                ],
+                correct: 0
+            },
+            {
+                section: "Research Methods",
+                question: "Standard deviation measures:",
+                options: [
+                    "The middle score",
+                    "The most common score",
+                    "How spread out scores are from the mean",
+                    "The relationship between two variables"
+                ],
+                correct: 2
+            },
+            
+            // Section 2: Psychological Disorders (Questions 16-35)
+            {
+                section: "Psychological Disorders",
+                question: "A psychological disorder must include all EXCEPT:",
+                options: [
+                    "Deviance from norms",
+                    "Personal distress",
+                    "Dysfunction in daily life",
+                    "Genetic cause"
+                ],
+                correct: 3
+            },
+            {
+                section: "Psychological Disorders",
+                question: "The biopsychosocial approach views psychological disorders as resulting from:",
+                options: [
+                    "Only biological factors",
+                    "Only psychological factors",
+                    "Interaction of biological, psychological, and social factors",
+                    "Only social factors"
+                ],
+                correct: 2
+            },
+            {
+                section: "Psychological Disorders",
+                question: "The DSM-5 is used to:",
+                options: [
+                    "Cure mental disorders",
+                    "Classify and diagnose mental disorders",
+                    "Explain the causes of all disorders",
+                    "Prescribe medications"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Which is NOT a critique of the DSM?",
+                options: [
+                    "It may label too many people as disordered",
+                    "Diagnostic borders seem arbitrary",
+                    "It helps guide treatment decisions",
+                    "It can create stigma"
+                ],
+                correct: 2
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Generalized Anxiety Disorder is characterized by:",
+                options: [
+                    "Sudden, intense panic attacks",
+                    "Persistent, excessive worry about many things",
+                    "Fear of specific objects",
+                    "Obsessive thoughts and compulsive behaviors"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "A person has an intense, uncontrollable fear of spiders and avoids even pictures of them. This is:",
+                options: [
+                    "Generalized Anxiety Disorder",
+                    "Panic Disorder",
+                    "Specific Phobia",
+                    "Social Phobia"
+                ],
+                correct: 2
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Obsessions are to compulsions as:",
+                options: [
+                    "Thoughts are to behaviors",
+                    "Behaviors are to thoughts",
+                    "Fears are to phobias",
+                    "Depression is to mania"
+                ],
+                correct: 0
+            },
+            {
+                section: "Psychological Disorders",
+                question: "PTSD develops in what percentage of people who experience trauma?",
+                options: [
+                    "1-5%",
+                    "10-35%",
+                    "50-75%",
+                    "90-100%"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "According to the evolutionary perspective, we are more likely to develop phobias of:",
+                options: [
+                    "Guns and cars",
+                    "Snakes and heights",
+                    "Computers and technology",
+                    "Books and papers"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "In classical conditioning explanations of anxiety, Little Albert's fear of rabbits demonstrates:",
+                options: [
+                    "Operant conditioning",
+                    "Overgeneralization of a conditioned response",
+                    "Observational learning",
+                    "Cognitive appraisal"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "To be diagnosed with Major Depressive Disorder, a person must have symptoms for at least:",
+                options: [
+                    "1 week",
+                    "2 weeks",
+                    "1 month",
+                    "6 months"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Which is a core symptom of Major Depressive Disorder?",
+                options: [
+                    "Hallucinations",
+                    "Mania",
+                    "Depressed mood and/or loss of interest",
+                    "Delusions"
+                ],
+                correct: 2
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Bipolar Disorder involves:",
+                options: [
+                    "Only depression",
+                    "Only mania",
+                    "Depression and mania",
+                    "Neither depression nor mania"
+                ],
+                correct: 2
+            },
+            {
+                section: "Psychological Disorders",
+                question: "In depression, which neurotransmitter is typically reduced?",
+                options: [
+                    "Dopamine",
+                    "Serotonin",
+                    "Acetylcholine",
+                    "Glutamate"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "The depressive explanatory style involves attributing bad events to causes that are:",
+                options: [
+                    "External, unstable, specific",
+                    "Internal, stable, global",
+                    "External, stable, specific",
+                    "Internal, unstable, global"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Positive symptoms of schizophrenia include:",
+                options: [
+                    "Flat affect and social withdrawal",
+                    "Hallucinations and delusions",
+                    "Reduced motivation",
+                    "Speaking less"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "The most common type of hallucination in schizophrenia is:",
+                options: [
+                    "Visual",
+                    "Auditory (hearing voices)",
+                    "Tactile",
+                    "Olfactory"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Schizophrenia typically develops:",
+                options: [
+                    "In early childhood",
+                    "In late adolescence/early adulthood",
+                    "In middle age",
+                    "In old age"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Chronic/process schizophrenia is characterized by:",
+                options: [
+                    "Sudden onset and good prognosis",
+                    "Slow development and poor prognosis without treatment",
+                    "Only positive symptoms",
+                    "Easy recovery"
+                ],
+                correct: 1
+            },
+            {
+                section: "Psychological Disorders",
+                question: "Excess dopamine receptors in schizophrenia help explain:",
+                options: [
+                    "Flat affect",
+                    "Social withdrawal",
+                    "Paranoia and hallucinations",
+                    "Reduced motivation"
+                ],
+                correct: 2
+            },
+
+            // Section 3: Social Psychology (Questions 36-55)
+            {
+                section: "Social Psychology",
+                question: "Attribution theory explains:",
+                options: [
+                    "How we form memories",
+                    "How we explain causes of behavior",
+                    "How we learn new skills",
+                    "How we solve problems"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "When Jake sees someone trip, he thinks 'What a clumsy person!' without considering the situation. This is:",
+                options: [
+                    "Situational attribution",
+                    "Dispositional attribution",
+                    "Fundamental attribution error",
+                    "Self-serving bias"
+                ],
+                correct: 2
+            },
+            {
+                section: "Social Psychology",
+                question: "When explaining our OWN failures, we tend to:",
+                options: [
+                    "Blame our personality",
+                    "Blame the situation",
+                    "Take full responsibility",
+                    "Avoid making attributions"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Central route persuasion involves:",
+                options: [
+                    "Emotional appeals",
+                    "Celebrity endorsements",
+                    "Evidence and logic",
+                    "Fear tactics"
+                ],
+                correct: 2
+            },
+            {
+                section: "Social Psychology",
+                question: "The foot-in-the-door phenomenon demonstrates:",
+                options: [
+                    "Small compliance leads to large compliance",
+                    "Large compliance leads to small compliance",
+                    "Compliance is impossible to change",
+                    "Attitudes never affect actions"
+                ],
+                correct: 0
+            },
+            {
+                section: "Social Psychology",
+                question: "In the Stanford Prison Study, guards became harsh because of:",
+                options: [
+                    "Their pre-existing personalities",
+                    "The roles they were assigned to play",
+                    "Genetic factors",
+                    "Previous trauma"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Cognitive dissonance occurs when:",
+                options: [
+                    "Our actions match our attitudes",
+                    "Our actions don't match our attitudes",
+                    "We refuse to take any action",
+                    "We have no attitudes"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "In Festinger's study, participants paid $1 to lie about a boring task changed their attitudes more than those paid $20 because:",
+                options: [
+                    "They were greedier",
+                    "They had less external justification",
+                    "They were more honest",
+                    "They forgot what they did"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Conformity refers to:",
+                options: [
+                    "Obeying direct commands",
+                    "Adjusting behavior to fit a group standard",
+                    "Independent thinking",
+                    "Resisting all social influence"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "In Asch's conformity studies, approximately what percentage of people conformed to obviously wrong answers?",
+                options: [
+                    "10%",
+                    "One-third",
+                    "Two-thirds",
+                    "90%"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "You're more likely to conform when:",
+                options: [
+                    "The group is very large",
+                    "You're confident in your beliefs",
+                    "The group is unanimous",
+                    "You're from an individualistic culture"
+                ],
+                correct: 2
+            },
+            {
+                section: "Social Psychology",
+                question: "In Milgram's obedience study, what percentage of participants went to the maximum shock level?",
+                options: [
+                    "5%",
+                    "25%",
+                    "45%",
+                    "65%"
+                ],
+                correct: 3
+            },
+            {
+                section: "Social Psychology",
+                question: "Milgram's study demonstrated that:",
+                options: [
+                    "Most people are naturally cruel",
+                    "Ordinary people obey authority even when causing harm",
+                    "No one will hurt others",
+                    "Authority has no effect on behavior"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Social facilitation occurs when:",
+                options: [
+                    "Everyone's performance improves in front of others",
+                    "Experts perform better and novices perform worse in front of others",
+                    "Everyone's performance declines in front of others",
+                    "Performance is unaffected by others"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Social loafing is:",
+                options: [
+                    "Taking a break during group work",
+                    "Working harder in groups",
+                    "Reduced effort in groups when not individually accountable",
+                    "Always leading group projects"
+                ],
+                correct: 2
+            },
+            {
+                section: "Social Psychology",
+                question: "Deindividuation requires:",
+                options: [
+                    "Only anonymity",
+                    "Only arousal",
+                    "Both anonymity and arousal",
+                    "Neither anonymity nor arousal"
+                ],
+                correct: 2
+            },
+            {
+                section: "Social Psychology",
+                question: "Group polarization means:",
+                options: [
+                    "Groups become more moderate",
+                    "Group discussion makes views more extreme",
+                    "Groups always disagree",
+                    "Groups make better decisions"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Groupthink occurs when:",
+                options: [
+                    "Groups think critically",
+                    "Harmony is prioritized over realistic assessment",
+                    "Individuals speak up about concerns",
+                    "Groups make excellent decisions"
+                ],
+                correct: 1
+            },
+            {
+                section: "Social Psychology",
+                question: "Ingroup bias refers to:",
+                options: [
+                    "Hating all outgroups",
+                    "Having no group preferences",
+                    "Favoring one's own group",
+                    "Favoring outgroups"
+                ],
+                correct: 2
+            },
+            {
+                section: "Social Psychology",
+                question: "The Stanford Prison Experiment was ended early because:",
+                options: [
+                    "Participants were bored",
+                    "Guards became too harsh and prisoners showed extreme distress",
+                    "Researchers ran out of funding",
+                    "It was completed successfully"
+                ],
+                correct: 1
+            },
+
+            // Section 4: Therapy (Questions 56-75)
+            {
+                section: "Therapy",
+                question: "Psychoanalysis was developed by:",
+                options: [
+                    "Carl Rogers",
+                    "B.F. Skinner",
+                    "Sigmund Freud",
+                    "Aaron Beck"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "In psychoanalysis, free association involves:",
+                options: [
+                    "Joining a group freely",
+                    "Speaking freely about memories and feelings",
+                    "Associating with free people",
+                    "Free therapy sessions"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "Transference in psychoanalysis refers to:",
+                options: [
+                    "Transferring payment",
+                    "Patient's reactions to therapist based on past relationships",
+                    "Transferring to a new therapist",
+                    "Therapist's feelings toward patient"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "Carl Rogers's client-centered therapy emphasizes:",
+                options: [
+                    "Interpreting unconscious conflicts",
+                    "Conditioning new behaviors",
+                    "Unconditional positive regard and empathy",
+                    "Challenging irrational thoughts"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Active listening in humanistic therapy includes:",
+                options: [
+                    "Interrupting frequently",
+                    "Giving constant advice",
+                    "Paraphrasing and reflecting feelings",
+                    "Staying silent"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Behavior therapy is based primarily on:",
+                options: [
+                    "Unconscious conflicts",
+                    "Self-actualization",
+                    "Learning principles",
+                    "Brain chemistry"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Systematic desensitization is used to treat:",
+                options: [
+                    "Depression",
+                    "Schizophrenia",
+                    "Phobias",
+                    "Bipolar disorder"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "In systematic desensitization, a person:",
+                options: [
+                    "Is immediately exposed to the most feared situation",
+                    "Gradually increases exposure as they learn to tolerate anxiety",
+                    "Avoids the feared situation completely",
+                    "Takes medication only"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "Aversive conditioning involves:",
+                options: [
+                    "Pairing problematic behavior with negative response",
+                    "Rewarding good behavior",
+                    "Ignoring all behavior",
+                    "Interpreting dreams"
+                ],
+                correct: 0
+            },
+            {
+                section: "Therapy",
+                question: "Token economies use:",
+                options: [
+                    "Classical conditioning",
+                    "Operant conditioning",
+                    "Cognitive therapy",
+                    "Psychoanalysis"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "Rational-Emotive Behavior Therapy (REBT) was developed by:",
+                options: [
+                    "Sigmund Freud",
+                    "Carl Rogers",
+                    "Albert Ellis",
+                    "B.F. Skinner"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Aaron Beck's cognitive therapy helps people:",
+                options: [
+                    "Uncover unconscious conflicts",
+                    "Notice and challenge thinking errors",
+                    "Condition new behaviors",
+                    "Experience catharsis"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "Catastrophizing is:",
+                options: [
+                    "A healthy coping mechanism",
+                    "Interpreting events as worst possible outcome",
+                    "Accepting reality",
+                    "A type of medication"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "CBT stands for:",
+                options: [
+                    "Comprehensive Brain Therapy",
+                    "Cognitive Behavioral Therapy",
+                    "Clinical Biology Treatment",
+                    "Central Brain Testing"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "Common factors in effective psychotherapy include all EXCEPT:",
+                options: [
+                    "Hope",
+                    "New perspective",
+                    "Therapeutic relationship",
+                    "Expensive fees"
+                ],
+                correct: 3
+            },
+            {
+                section: "Therapy",
+                question: "SSRIs are used to treat:",
+                options: [
+                    "Only depression",
+                    "Only anxiety",
+                    "Depression, anxiety, and OCD",
+                    "Schizophrenia only"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Antipsychotic drugs work primarily by:",
+                options: [
+                    "Increasing serotonin",
+                    "Blocking dopamine receptors",
+                    "Enhancing GABA",
+                    "Reducing norepinephrine"
+                ],
+                correct: 1
+            },
+            {
+                section: "Therapy",
+                question: "ECT (Electroconvulsive Therapy) is used for:",
+                options: [
+                    "All mental disorders",
+                    "Mild anxiety",
+                    "Severe depression",
+                    "Personality disorders"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Therapeutic lifestyle changes include all EXCEPT:",
+                options: [
+                    "Exercise",
+                    "Good sleep",
+                    "Social isolation",
+                    "Healthy nutrition"
+                ],
+                correct: 2
+            },
+            {
+                section: "Therapy",
+                question: "Which professional can prescribe medication?",
+                options: [
+                    "Psychologist (PhD)",
+                    "Psychiatrist (MD)",
+                    "Social worker (MSW)",
+                    "All of the above"
+                ],
+                correct: 1
+            }
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = new Array(questions.length).fill(null);
+        let quizStarted = false;
+
+        function startQuiz() {
+            document.getElementById('startScreen').style.display = 'none';
+            document.getElementById('quizScreen').style.display = 'block';
+            quizStarted = true;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            
+            // Update progress bar
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            
+            // Update question number and section
+            document.getElementById('questionNumber').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            document.getElementById('sectionLabel').textContent = question.section;
+            document.getElementById('questionText').textContent = question.question;
+            
+            // Create options
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                if (userAnswers[currentQuestion] === index) {
+                    optionDiv.classList.add('selected');
+                }
+                
+                optionDiv.innerHTML = `
+                    <input type="radio" name="answer" id="option${index}" value="${index}" 
+                           ${userAnswers[currentQuestion] === index ? 'checked' : ''}>
+                    <label for="option${index}">${String.fromCharCode(97 + index)}) ${option}</label>
+                `;
+                
+                optionDiv.onclick = () => selectOption(index);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // Update buttons
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            document.getElementById('nextBtn').textContent = 
+                currentQuestion === questions.length - 1 ? 'Finish Quiz' : 'Next →';
+        }
+
+        function selectOption(index) {
+            userAnswers[currentQuestion] = index;
+            
+            // Update visual selection
+            document.querySelectorAll('.option').forEach((opt, i) => {
+                if (i === index) {
+                    opt.classList.add('selected');
+                    opt.querySelector('input').checked = true;
+                } else {
+                    opt.classList.remove('selected');
+                    opt.querySelector('input').checked = false;
+                }
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quizScreen').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            document.getElementById('progressFill').style.width = '100%';
+            
+            // Calculate scores
+            let totalCorrect = 0;
+            let section1Correct = 0, section2Correct = 0, section3Correct = 0, section4Correct = 0;
+            
+            const incorrectQuestions = [];
+            
+            questions.forEach((q, index) => {
+                const isCorrect = userAnswers[index] === q.correct;
+                if (isCorrect) {
+                    totalCorrect++;
+                    if (index < 15) section1Correct++;
+                    else if (index < 35) section2Correct++;
+                    else if (index < 55) section3Correct++;
+                    else section4Correct++;
+                } else {
+                    incorrectQuestions.push({
+                        number: index + 1,
+                        question: q.question,
+                        yourAnswer: userAnswers[index] !== null ? q.options[userAnswers[index]] : "Not answered",
+                        correctAnswer: q.options[q.correct],
+                        section: q.section
+                    });
+                }
+            });
+            
+            const percentage = Math.round((totalCorrect / questions.length) * 100);
+            
+            // Display scores
+            document.getElementById('scoreDisplay').textContent = `${percentage}%`;
+            document.getElementById('totalScore').textContent = `${totalCorrect}/${questions.length}`;
+            document.getElementById('section1Score').textContent = `${section1Correct}/15`;
+            document.getElementById('section2Score').textContent = `${section2Correct}/20`;
+            document.getElementById('section3Score').textContent = `${section3Correct}/20`;
+            document.getElementById('section4Score').textContent = `${section4Correct}/20`;
+            
+            // Performance message
+            const messageDiv = document.getElementById('performanceMessage');
+            if (percentage >= 90) {
+                messageDiv.className = 'performance-message performance-excellent';
+                messageDiv.innerHTML = '🎉 <strong>Excellent!</strong> You\'re well-prepared for the exam!';
+            } else if (percentage >= 80) {
+                messageDiv.className = 'performance-message performance-good';
+                messageDiv.innerHTML = '👍 <strong>Good job!</strong> Review the areas you missed and you\'ll be ready!';
+            } else if (percentage >= 70) {
+                messageDiv.className = 'performance-message performance-fair';
+                messageDiv.innerHTML = '📚 <strong>Fair.</strong> More studying needed. Focus on weak areas.';
+            } else {
+                messageDiv.className = 'performance-message performance-poor';
+                messageDiv.innerHTML = '⚠️ <strong>Needs Improvement.</strong> Review the material thoroughly before the exam.';
+            }
+            
+            // Show complete review of all answers
+            const reviewSection = document.getElementById('reviewSection');
+            let reviewHTML = '<h3>📋 Complete Answer Review</h3>';
+            reviewHTML += `<p style="margin-bottom: 15px;">Review all ${questions.length} questions below. ✓ = Correct, ❌ = Incorrect</p>`;
+            
+            questions.forEach((q, index) => {
+                const isCorrect = userAnswers[index] === q.correct;
+                const userAnswerText = userAnswers[index] !== null ? q.options[userAnswers[index]] : "Not answered";
+                const correctAnswerText = q.options[q.correct];
+                
+                reviewHTML += `
+                    <div class="review-item ${isCorrect ? 'correct' : ''}">
+                        <div class="review-question">
+                            ${isCorrect ? '✓' : '❌'} <strong>Question ${index + 1}</strong> (${q.section}): ${q.question}
+                        </div>
+                `;
+                
+                if (isCorrect) {
+                    reviewHTML += `
+                        <div class="review-answer correct-answer">
+                            ✓ Your answer: ${correctAnswerText}
+                        </div>
+                    `;
+                } else {
+                    reviewHTML += `
+                        <div class="review-answer your-answer">
+                            ❌ Your answer: ${userAnswerText}
+                        </div>
+                        <div class="review-answer correct-answer">
+                            ✓ Correct answer: ${correctAnswerText}
+                        </div>
+                    `;
+                }
+                
+                reviewHTML += `</div>`;
+            });
+            
+            reviewSection.innerHTML = reviewHTML;
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = new Array(questions.length).fill(null);
+            document.getElementById('resultsScreen').style.display = 'none';
+            document.getElementById('startScreen').style.display = 'block';
+            document.getElementById('progressFill').style.width = '0%';
+        }
+
+        function showReviewOnly() {
+            window.scrollTo({ top: document.getElementById('reviewSection').offsetTop - 100, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
